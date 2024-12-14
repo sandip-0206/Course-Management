@@ -57,6 +57,7 @@ const Sidebar = ({
     { name: "Add New Course", path: "/add-course" },
     { name: "Course Category", path: "/course-category" },
     { name: "Coupons", path: "/coupons" },
+    { name: "Payment", path: "/payment-system" },
   ];
 
   const tutorTraining = [
@@ -78,11 +79,9 @@ const Sidebar = ({
   ];
 
   const payments = [
-    { name: "Student Reports", path: "/student-reports" },
-    { name: "Instructor Reports", path: "/instructor-reports" },
+    { name: "Payment System", path: "/payment-system" },
+    { name: "Payment History", path: "/payment-history" },
   ];
-  const [open, setOpen] = React.useState("");
-  console.log("aaa", activeSubMenu);
 
   // const handleClick = () => {
   //   setOpen(!open);
@@ -120,6 +119,8 @@ const Sidebar = ({
           "& .MuiDrawer-paper": {
             width: "250px",
             transition: "width 0.3s ease", // Ensure smooth transition for drawer width
+            backgroundColor: colors.primary[400],
+            color: colors.grey[100],
           },
         }}
       >
@@ -141,7 +142,10 @@ const Sidebar = ({
 
           {isSmallScreen && (
             <IconButton onClick={toggleSidebar}>
-              <HiX className="text-2xl cursor-pointer text-gray-500" />
+              <HiX
+                className="text-2xl cursor-pointer text-gray-500"
+                style={{ color: colors.primary[100] }}
+              />
             </IconButton>
           )}
         </Box>
@@ -163,7 +167,7 @@ const Sidebar = ({
           >
             <ListItemIcon>
               <FaHome
-                className="text-blue-500"
+                className="text-blue-500 text-2xl"
                 // sx={{
                 //   color:
                 //     activeSubMenu === "Dashboard"
@@ -181,7 +185,7 @@ const Sidebar = ({
 
           <ListItemButton onClick={() => handleClick("courses")}>
             <ListItemIcon>
-              <FaChalkboardTeacher className="text-indigo-500" />
+              <FaChalkboardTeacher className="text-indigo-500 text-2xl" />
             </ListItemIcon>
             <ListItemText primary="Courses" />
             {openSections.courses ? <ExpandLess /> : <ExpandMore />}
@@ -192,11 +196,14 @@ const Sidebar = ({
                 <ListItemButton
                   sx={{
                     pl: 4,
+                    color:
+                      activeSubMenu === item.name
+                        ? "#6870fa"
+                        : colors.grey[100],
                     backgroundColor:
-                      activeSubMenu === item.name ? "#e0e0e0" : "transparent",
-                    "&:hover": {
-                      backgroundColor: "#f5f5f5",
-                    },
+                      activeSubMenu === item.name
+                        ? colors.grey[900]
+                        : "transparent",
                   }}
                   button
                   component={Link}
@@ -227,7 +234,7 @@ const Sidebar = ({
           >
             <ListItemIcon>
               <FaUser
-                className="text-purple-500"
+                className="text-purple-500 text-2xl"
                 // sx={{
                 //   color:
                 //     activeSubMenu === "Tutor Training"
@@ -260,7 +267,7 @@ const Sidebar = ({
           >
             <ListItemIcon>
               <FaBook
-                className="text-orange-500"
+                className="text-orange-500 text-2xl"
                 // sx={{
                 //   color:
                 //     activeSubMenu === "Ebooks" ? "#6870fa" : colors.grey[100],
@@ -292,7 +299,7 @@ const Sidebar = ({
           >
             <ListItemIcon>
               <FaTag
-                className="text-yellow-500"
+                className="text-yellow-500 text-2xl"
                 // sx={{
                 //   color:
                 //     activeSubMenu === "Affiliates"
@@ -323,7 +330,7 @@ const Sidebar = ({
           >
             <ListItemIcon>
               <FaQuestionCircle
-                className="text-red-500"
+                className="text-red-500 text-2xl"
                 // sx={{
                 //   color:
                 //     activeSubMenu === "Support" ? "#6870fa" : colors.grey[100],
@@ -357,6 +364,7 @@ const Sidebar = ({
                   color:
                     activeSubMenu === "Settings" ? "#6870fa" : colors.grey[100],
                 }}
+                className="text-2xl"
               />
             </ListItemIcon>
             <ListItemText
@@ -378,7 +386,7 @@ const Sidebar = ({
 
           <ListItemButton onClick={() => handleClick("bootCamp")}>
             <ListItemIcon>
-              <FaChalkboardTeacher className="text-indigo-500" />
+              <FaChalkboardTeacher className="text-indigo-500 text-2xl" />
             </ListItemIcon>
             <ListItemText primary="BootCamp Team Training" />
             {openSections.bootCamp ? <ExpandLess /> : <ExpandMore />}
@@ -389,11 +397,14 @@ const Sidebar = ({
                 <ListItemButton
                   sx={{
                     pl: 4,
+                    color:
+                      activeSubMenu === item.name
+                        ? "#6870fa"
+                        : colors.grey[100],
                     backgroundColor:
-                      activeSubMenu === item.name ? "#e0e0e0" : "transparent",
-                    "&:hover": {
-                      backgroundColor: "#f5f5f5",
-                    },
+                      activeSubMenu === item.name
+                        ? colors.grey[900]
+                        : "transparent",
                   }}
                   button
                   component={Link}
@@ -408,7 +419,7 @@ const Sidebar = ({
 
           <ListItemButton onClick={() => handleClick("tutorBooking")}>
             <ListItemIcon>
-              <FaCalendarCheck className="text-teal-500" />
+              <FaCalendarCheck className="text-teal-500 text-2xl" />
             </ListItemIcon>
             <ListItemText primary="Tutor Booking" />
             {openSections.tutorBooking ? <ExpandLess /> : <ExpandMore />}
@@ -419,11 +430,14 @@ const Sidebar = ({
                 <ListItemButton
                   sx={{
                     pl: 4,
+                    color:
+                      activeSubMenu === item.name
+                        ? "#6870fa"
+                        : colors.grey[100],
                     backgroundColor:
-                      activeSubMenu === item.name ? "#e0e0e0" : "transparent",
-                    "&:hover": {
-                      backgroundColor: "#f5f5f5",
-                    },
+                      activeSubMenu === item.name
+                        ? colors.grey[900]
+                        : "transparent",
                   }}
                   button
                   component={Link}
@@ -438,7 +452,7 @@ const Sidebar = ({
 
           <ListItemButton onClick={() => handleClick("enrollments")}>
             <ListItemIcon>
-              <FaUsers className="text-yellow-600" />
+              <FaUsers className="text-yellow-600 text-2xl" />
             </ListItemIcon>
             <ListItemText primary="Enrollments" />
             {openSections.enrollments ? <ExpandLess /> : <ExpandMore />}
@@ -449,11 +463,14 @@ const Sidebar = ({
                 <ListItemButton
                   sx={{
                     pl: 4,
+                    color:
+                      activeSubMenu === item.name
+                        ? "#6870fa"
+                        : colors.grey[100],
                     backgroundColor:
-                      activeSubMenu === item.name ? "#e0e0e0" : "transparent",
-                    "&:hover": {
-                      backgroundColor: "#f5f5f5",
-                    },
+                      activeSubMenu === item.name
+                        ? colors.grey[900]
+                        : "transparent",
                   }}
                   button
                   component={Link}
@@ -468,7 +485,7 @@ const Sidebar = ({
 
           <ListItemButton onClick={() => handleClick("reports")}>
             <ListItemIcon>
-              <FaFileAlt className="text-gray-600" />
+              <FaFileAlt className="text-gray-600 text-2xl" />
             </ListItemIcon>
             <ListItemText primary="Reports" />
             {openSections.reports ? <ExpandLess /> : <ExpandMore />}
@@ -479,11 +496,14 @@ const Sidebar = ({
                 <ListItemButton
                   sx={{
                     pl: 4,
+                    color:
+                      activeSubMenu === item.name
+                        ? "#6870fa"
+                        : colors.grey[100],
                     backgroundColor:
-                      activeSubMenu === item.name ? "#e0e0e0" : "transparent",
-                    "&:hover": {
-                      backgroundColor: "#f5f5f5",
-                    },
+                      activeSubMenu === item.name
+                        ? colors.grey[900]
+                        : "transparent",
                   }}
                   button
                   component={Link}
@@ -498,7 +518,7 @@ const Sidebar = ({
 
           <ListItemButton onClick={() => handleClick("payments")}>
             <ListItemIcon>
-              <FaCreditCard className="text-gray-500" />
+              <FaCreditCard className="text-gray-500 text-2xl" />
             </ListItemIcon>
             <ListItemText primary="Offline Payment" />
             {openSections.payments ? <ExpandLess /> : <ExpandMore />}
@@ -509,11 +529,14 @@ const Sidebar = ({
                 <ListItemButton
                   sx={{
                     pl: 4,
+                    color:
+                      activeSubMenu === item.name
+                        ? "#6870fa"
+                        : colors.grey[100],
                     backgroundColor:
-                      activeSubMenu === item.name ? "#e0e0e0" : "transparent",
-                    "&:hover": {
-                      backgroundColor: "#f5f5f5",
-                    },
+                      activeSubMenu === item.name
+                        ? colors.grey[900]
+                        : "transparent",
                   }}
                   button
                   component={Link}
@@ -529,7 +552,36 @@ const Sidebar = ({
           <ListItem
             button
             component={Link}
-            to="/Message"
+            to="/payment-system"
+            onClick={() => setActiveSubMenu("Payment")}
+            sx={{
+              color: activeSubMenu === "Payment" ? "#6870fa" : colors.grey[100],
+              backgroundColor:
+                activeSubMenu === "Payment" ? colors.grey[900] : "transparent",
+            }}
+          >
+            <ListItemIcon>
+              <FaCreditCard
+                sx={{
+                  color:
+                    activeSubMenu === "Payment" ? "#6870fa" : colors.grey[100],
+                }}
+                className="text-2xl"
+              />
+            </ListItemIcon>
+            <ListItemText
+              primary="Payment"
+              sx={{
+                color:
+                  activeSubMenu === "Payment" ? "#6870fa" : colors.grey[100],
+              }}
+            />
+          </ListItem>
+
+          <ListItem
+            button
+            component={Link}
+            to="/message"
             onClick={() => setActiveSubMenu("Message")}
             sx={{
               color: activeSubMenu === "Message" ? "#6870fa" : colors.grey[100],
@@ -543,6 +595,7 @@ const Sidebar = ({
                   color:
                     activeSubMenu === "Message" ? "#6870fa" : colors.grey[100],
                 }}
+                className="text-2xl"
               />
             </ListItemIcon>
             <ListItemText
@@ -576,6 +629,7 @@ const Sidebar = ({
                       ? "#6870fa"
                       : colors.grey[100],
                 }}
+                className="text-2xl"
               />
             </ListItemIcon>
             <ListItemText
@@ -615,7 +669,7 @@ const Sidebar = ({
           >
             <ListItemIcon>
               <FaHeadset
-                className="text-red-500"
+                className="text-red-500 text-2xl"
                 // sx={{
                 //   color:
                 //     activeSubMenu === "Customer Support"

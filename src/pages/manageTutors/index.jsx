@@ -1,71 +1,193 @@
 import React, { useState } from "react";
 import {
-  Card,
-  CardContent,
-  CardMedia,
+  CalendarToday,
+  Alarm,
+  PersonAdd,
+  CheckCircle,
+} from "@mui/icons-material"; // Material-UI icons
+import {
+  TextField,
   Button,
+  IconButton,
+  Modal,
   Typography,
 } from "@mui/material";
+// import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { DesktopDatePicker, TimePicker } from "@mui/x-date-pickers";
+import { LocalizationProvider } from "@mui/x-date-pickers";
 
-const ManageTutors = ({ onSelect }) => {
-  const [selectedTutor, setSelectedTutor] = useState(null);
+const ManageTutors = () => {
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedTime, setSelectedTime] = useState(null);
+  const [studentName, setStudentName] = useState("");
+  const [studentEmail, setStudentEmail] = useState("");
+  const [openModal, setOpenModal] = useState(false);
+  const [bookingConfirmed, setBookingConfirmed] = useState(false);
 
-  const tutors = [
-    {
-      id: 1,
-      name: "John Doe",
-      subjects: ["Math"],
-      photo: "/tutor1.jpg",
-      rating: 4.5,
-    },
-    {
-      id: 2,
-      name: "Jane Smith",
-      subjects: ["English"],
-      photo: "/tutor2.jpg",
-      rating: 4.8,
-    },
-    {
-      id: 3,
-      name: "Emily Johnson",
-      subjects: ["Science"],
-      photo: "/tutor3.jpg",
-      rating: 4.2,
-    },
-  ];
+  const handleDateChange = (date) => {
+    setSelectedDate(date);
+  };
+
+  const handleTimeChange = (time) => {
+    setSelectedTime(time);
+  };
+
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    setOpenModal(true); // Show confirmation modal
+  };
+
+  const handleConfirmBooking = () => {
+    setBookingConfirmed(true);
+    setOpenModal(false);
+  };
+
+  const handleCloseModal = () => {
+    setOpenModal(false);
+  };
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-4">
-      {tutors.map((tutor) => (
-        <Card key={tutor.id} className="max-w-sm shadow-lg">
-          <CardMedia
-            component="img"
-            alt={tutor.name}
-            height="200"
-            image={tutor.photo}
-            className="rounded-t-lg"
-          />
-          <CardContent>
-            <Typography variant="h6" gutterBottom>
-              {tutor.name}
-            </Typography>
-            <Typography variant="body2" color="textSecondary" paragraph>
-              Subjects: {tutor.subjects.join(", ")}
-            </Typography>
-            <Typography variant="body2" color="textPrimary">
-              ⭐ {tutor.rating}/5
-            </Typography>
-            <Button
-              onClick={() => onSelect(tutor)}
-              variant="contained"
-              color="primary"
-              className="mt-4"
-            >
-              Book Now
-            </Button>
-          </CardContent>
-        </Card>
-      ))}
+    <div className="container mx-auto p-8">
+      {/* Header */}
+      <div className="text-center mb-10">
+        <h1 className="text-5xl font-extrabold text-gray-800">
+          Book a Session with Our Tutors
+        </h1>
+        <p className="text-lg text-gray-600 mt-2">
+          Select a date, time, and tutor to get started!
+        </p>
+      </div>
+
+      <div className="flex justify-center">
+        {/* Booking Form */}
+        <div className="bg-white p-6 rounded-lg shadow-xl w-full max-w-lg">
+          <form onSubmit={handleFormSubmit}>
+            {/* Tutor Name */}
+            <div className="mb-4">
+              <TextField
+                label="Your Name"
+                variant="outlined"
+                fullWidth
+                value={studentName}
+                onChange={(e) => setStudentName(e.target.value)}
+                required
+              />
+            </div>
+
+            {/* Tutor Email */}
+            <div className="mb-4">
+              <TextField
+                label="Your Email"
+                variant="outlined"
+                fullWidth
+                value={studentEmail}
+                onChange={(e) => setStudentEmail(e.target.value)}
+                required
+                type="email"
+              />
+            </div>
+
+            {/* Date Picker */}
+            {/* <div className="mb-4">
+              <LocalizationProvider dateAdapter={AdapterDateFns}>
+                <DesktopDatePicker
+                  label="Select Date"
+                  inputFormat="MM/dd/yyyy"
+                  value={selectedDate}
+                  onChange={handleDateChange}
+                  renderInput={(props) => <TextField {...props} fullWidth />}
+                  required
+                />
+              </LocalizationProvider>
+            </div> */}
+
+            {/* Time Picker */}
+            {/* <div className="mb-4">
+              <LocalizationProvider dateAdapter={AdapterDateFns}>
+                <TimePicker
+                  label="Select Time"
+                  value={selectedTime}
+                  onChange={handleTimeChange}
+                  renderInput={(props) => <TextField {...props} fullWidth />}
+                  required
+                />
+              </LocalizationProvider>
+            </div> */}
+
+            {/* Submit Button */}
+            <div className="flex justify-center">
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                size="large"
+                startIcon={<PersonAdd />}
+                className="w-full mt-4"
+              >
+                Book Now
+              </Button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      {/* Modal for booking confirmation */}
+      <Modal
+        open={openModal}
+        onClose={handleCloseModal}
+        aria-labelledby="modal-title"
+        aria-describedby="modal-description"
+      >
+        <div className="bg-white p-6 rounded-lg shadow-xl w-full max-w-md mx-auto mt-24">
+          {!bookingConfirmed ? (
+            <>
+              <Typography
+                id="modal-title"
+                variant="h6"
+                className="text-2xl font-semibold mb-4"
+              >
+                Confirm Your Booking
+              </Typography>
+              <Typography
+                id="modal-description"
+                className="text-lg text-gray-600 mb-4"
+              >
+                You have selected {studentName},{" "}
+                {selectedDate ? selectedDate.toLocaleDateString() : ""} at{" "}
+                {selectedTime ? selectedTime.toLocaleTimeString() : ""}.
+              </Typography>
+              <div className="flex justify-center gap-4">
+                <Button
+                  onClick={handleConfirmBooking}
+                  variant="contained"
+                  color="primary"
+                  startIcon={<CheckCircle />}
+                >
+                  Confirm
+                </Button>
+                <Button
+                  onClick={handleCloseModal}
+                  variant="outlined"
+                  color="secondary"
+                >
+                  Cancel
+                </Button>
+              </div>
+            </>
+          ) : (
+            <>
+              <Typography variant="h6" className="text-xl font-semibold mb-4">
+                Booking Confirmed!
+              </Typography>
+              <Typography className="text-lg text-green-600">
+                Your session with {studentName} is confirmed for{" "}
+                {selectedDate.toLocaleDateString()} at{" "}
+                {selectedTime.toLocaleTimeString()}.
+              </Typography>
+            </>
+          )}
+        </div>
+      </Modal>
     </div>
   );
 };

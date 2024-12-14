@@ -1,4 +1,4 @@
-import { useTheme } from "@mui/material";
+import { IconButton, useTheme } from "@mui/material";
 import React, { useState } from "react";
 import { FaSearch, FaCheck, FaTimes, FaUserPlus } from "react-icons/fa";
 import { tokens } from "../../theme";
@@ -108,18 +108,20 @@ const PendingEnrollment = () => {
               <td className="p-4">{enrollment.name}</td>
               <td className="p-4">{enrollment.email}</td>
               <td className="p-4 flex space-x-4">
-                <button
+                <IconButton
+                  size="small"
                   onClick={() => handleApproveEnrollment(enrollment.id)}
-                  className="text-green-500 hover:text-green-700"
+                  style={{ color: "green" }}
                 >
                   <FaCheck />
-                </button>
-                <button
+                </IconButton>
+                <IconButton
+                  size="small"
                   onClick={() => handleRejectEnrollment(enrollment.id)}
-                  className="text-red-500 hover:text-red-700"
+                  style={{ color: "red" }}
                 >
                   <FaTimes />
-                </button>
+                </IconButton>
               </td>
             </tr>
           ))}

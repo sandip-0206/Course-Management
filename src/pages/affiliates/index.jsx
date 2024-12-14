@@ -179,7 +179,7 @@ const Affiliates = () => {
           affiliates.map((affiliate) => (
             <div
               key={affiliate.id}
-              className="flex justify-between items-center p-4 dark:bg-gray-700 rounded-lg shadow-md"
+              className="flex flex-wrap gap-4 justify-between items-center p-4 dark:bg-gray-700 rounded-lg shadow-md"
               style={{
                 backgroundColor: colors.primary[400],
                 color: colors.primary[100],

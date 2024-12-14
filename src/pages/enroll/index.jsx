@@ -1,4 +1,4 @@
-import { useTheme } from "@mui/material";
+import { IconButton, useTheme } from "@mui/material";
 import React, { useState } from "react";
 import { FaSearch, FaTrash, FaUserPlus } from "react-icons/fa";
 import { tokens } from "../../theme";
@@ -103,12 +103,12 @@ const ManageEnrollment = () => {
               <td className="p-4">{enrollment.name}</td>
               <td className="p-4 ">{enrollment.email}</td>
               <td className="p-4">
-                <button
+                <IconButton
+                  size="small"
                   onClick={() => handleRemoveEnrollment(enrollment.id)}
-                  className="text-red-500 hover:text-red-700"
                 >
-                  <FaTrash />
-                </button>
+                  <FaTrash className="text-red-700" />
+                </IconButton>
               </td>
             </tr>
           ))}

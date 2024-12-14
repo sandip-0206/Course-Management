@@ -1,46 +1,55 @@
 import React, { useState, useRef, useEffect, useContext } from "react";
-import { HiMenuAlt3 } from "react-icons/hi"; // Hamburger icon
-import { FaSearch, FaBell, FaCog } from "react-icons/fa";
-import { MdDarkMode, MdLightMode } from "react-icons/md";
-import Modal from "./Modal"; // Import Modal component
+import {
+  IconButton,
+  useMediaQuery,
+  useTheme,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button,
+  TextField,
+} from "@mui/material";
+import {
+  Menu,
+  Search,
+  Notifications,
+  Settings,
+  Brightness4,
+  Brightness7,
+} from "@mui/icons-material";
 import { useNavigate } from "react-router";
-import { IconButton, useMediaQuery, useTheme } from "@mui/material";
 import { ColorModeContext, tokens } from "../theme";
 
 const Header = ({
   toggleSidebar,
   isSidebarOpen,
   activeSubMenu,
-  // setActiveSubMenu,
+  isProfileEditable,
+  checked,
+  setChecked,
 }) => {
-  console.log("activeSubMenu", activeSubMenu);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
+
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const colorMode = useContext(ColorModeContext);
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("md")); // Detect small screens
-
   const searchInputRef = useRef(null);
   const navigate = useNavigate();
 
-  const handleSearchChange = (event) => {
-    setSearchQuery(event.target.value);
-  };
+  const handleSearchToggle = () => setIsSearchOpen(!isSearchOpen);
 
-  const handleSearchToggle = () => {
-    setIsSearchOpen(!isSearchOpen);
-  };
-
-  const handleNotificationToggle = () => {
+  const handleNotificationToggle = () =>
     setIsNotificationsOpen(!isNotificationsOpen);
-  };
 
-  const handleProfileModalToggle = () => {
+  const handleProfileModalToggle = () =>
     setIsProfileModalOpen(!isProfileModalOpen);
-  };
+
+  const handleSearchChange = (event) => setSearchQuery(event.target.value);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -53,81 +62,44 @@ const Header = ({
     };
 
     document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   return (
     <div
-      className="flex justify-between items-center p-4 bg-white drop-shadow-md"
+      className="flex justify-between items-center p-4"
       style={{
         backgroundColor: colors.primary[400],
         color: colors.grey[100],
       }}
     >
-      {/* Hamburger Icon - only visible on small and medium screens */}
-      <div className="flex items-center gap-5 ">
-        <div
-          className={`text-2xl  cursor-pointer border-zinc-700 ${
-            isSidebarOpen ? "hidden" : "lg:hidden"
-          }`}
-          onClick={toggleSidebar}
-        >
-          <HiMenuAlt3 />
-        </div>
+      {/* Hamburger Icon - Visible on small screens */}
+      <div className="flex items-center gap-5">
+        {isSmallScreen && (
+          <IconButton onClick={toggleSidebar}>
+            <Menu style={{ color: colors.grey[100] }} />
+          </IconButton>
+        )}
 
         {/* Header Title */}
         <div>
           <h1
-            className={`text-xl font-bold ${
-              {
-                Dashboard: "text-indigo-500",
-                "Tutor Training": "text-purple-500",
-                Ebooks: "text-orange-500",
-                Affiliates: "text-yellow-500",
-                Support: "text-red-500",
-                Settings: "text-gray-500",
-                "BootCamp Team Training": "text-indigo-500",
-                "Tutor Booking": "text-green-500",
-                Enrollments: "text-yellow-500",
-              }[activeSubMenu] || "text-gray-500" // Default color for other cases
-            }`}
+            className={`text-xl font-bold ${getActiveMenuColor(activeSubMenu)}`}
           >
             {activeSubMenu}
           </h1>
-
-          {activeSubMenu === "Dashboard" &&
-            (() => {
-              const currentHour = new Intl.DateTimeFormat("en-US", {
-                hour: "numeric",
-                hourCycle: "h23",
-                timeZone: "Asia/Kolkata", // Set the time zone to India
-              }).format(new Date());
-
-              let greeting = "Good morning";
-              if (currentHour >= 12 && currentHour < 17) {
-                greeting = "Good afternoon";
-              } else if (currentHour >= 17) {
-                greeting = "Good evening";
-              }
-
-              return <p className="">{greeting}, Daniel!</p>;
-            })()}
+          {activeSubMenu === "Dashboard" && <Greeting />}
         </div>
       </div>
 
-      {/* Icons and Avatar */}
+      {/* Icons Section */}
       <div className="flex items-center">
-        {/* Search Icon */}
+        {/* Search */}
         {!isSmallScreen && (
           <div className="relative">
-            <FaSearch
-              className={` mr-4 cursor-pointer ${
-                isSearchOpen ? "hidden" : "block"
-              }`}
-              onClick={handleSearchToggle}
-            />
+            <IconButton onClick={handleSearchToggle}>
+              <Search style={{ color: colors.grey[100] }} />
+            </IconButton>
             {isSearchOpen && (
               <input
                 ref={searchInputRef}
@@ -135,97 +107,116 @@ const Header = ({
                 value={searchQuery}
                 onChange={handleSearchChange}
                 placeholder="Search..."
-                className="absolute top-0 right-1 transform -translate-x-1/2 w-lg p-2 border rounded-md -mt-4"
+                className="absolute top-0 right-0 transform w-full p-2 border rounded-md"
               />
             )}
           </div>
         )}
 
-        {/* Dark and Light Mode */}
+        {/* Dark/Light Mode */}
         <IconButton onClick={colorMode.toggleColorMode}>
           {theme.palette.mode === "dark" ? (
-            <MdDarkMode
-              sx={{
-                color: colors.greenAccent[600],
-                fontSize: isSmallScreen ? "20px" : "26px",
-              }}
-            />
+            <Brightness4 style={{ color: colors.greenAccent[600] }} />
           ) : (
-            <MdLightMode
-              sx={{
-                color: colors.greenAccent[600],
-                fontSize: isSmallScreen ? "20px" : "26px",
-              }}
-            />
+            <Brightness7 style={{ color: colors.greenAccent[600] }} />
           )}
         </IconButton>
 
-        {/* Notifications Icon */}
-        <IconButton>
-          <FaBell
-            className=" cursor-pointer"
-            onClick={handleNotificationToggle}
-          />
+        {/* Notifications */}
+        <IconButton onClick={handleNotificationToggle}>
+          <Notifications style={{ color: colors.grey[100] }} />
         </IconButton>
 
-        {/* Settings Icon */}
-        <IconButton>
-          <FaCog
-            className="cursor-pointer"
-            onClick={() => navigate("/settings")}
-          />
+        {/* Settings */}
+        <IconButton onClick={() => navigate("/settings")}>
+          <Settings style={{ color: colors.grey[100] }} />
         </IconButton>
 
         {/* Profile Avatar */}
-        <div className="relative">
+        <IconButton onClick={handleProfileModalToggle}>
           <img
             src="https://placehold.co/40x40"
             alt="User Avatar"
-            className="rounded-full cursor-pointer"
-            onClick={handleProfileModalToggle}
+            className="rounded-full"
           />
-        </div>
+        </IconButton>
       </div>
 
-      {/* Modals */}
-      <Modal
-        isOpen={isNotificationsOpen}
-        onClose={handleNotificationToggle}
-        title="Notifications"
-      >
-        <ul className="space-y-2">
-          <li className="text-sm ">New course available!</li>
-          <li className="text-sm ">Reminder: Course deadline approaching</li>
-        </ul>
-      </Modal>
+      {/* Notifications Modal */}
+      {checked && (
+        <Dialog open={isNotificationsOpen} onClose={handleNotificationToggle}>
+          <DialogTitle>Notifications</DialogTitle>
+          <DialogContent>
+            <ul>
+              <li>New course available!</li>
+              <li>Reminder: Course deadline approaching</li>
+            </ul>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleNotificationToggle} color="primary">
+              Close
+            </Button>
+          </DialogActions>
+        </Dialog>
+      )}
 
-      <Modal
-        isOpen={isProfileModalOpen}
-        onClose={handleProfileModalToggle}
-        title="Edit Profile"
-      >
-        {/* Profile edit content */}
-        <form>
-          <div className="mb-4">
-            <label className="block">Name</label>
-            <input type="text" className="border p-2 w-full" />
-          </div>
-          <div className="mb-4">
-            <label className="block">Email</label>
-            <input type="email" className="border p-2 w-full" />
-          </div>
-          <div className="flex justify-end">
-            <button
-              type="submit"
-              className="px-4 py-2 bg-blue-500 text-white rounded"
-            >
+      {/* Profile Edit Modal */}
+      {isProfileEditable && (
+        <Dialog open={isProfileModalOpen} onClose={handleProfileModalToggle}>
+          <DialogTitle>Edit Profile</DialogTitle>
+          <DialogContent>
+            <form>
+              <TextField
+                fullWidth
+                label="Name"
+                margin="normal"
+                defaultValue="Daniel"
+              />
+              <TextField
+                fullWidth
+                label="Email"
+                margin="normal"
+                defaultValue="daniel@example.com"
+                type="email"
+              />
+            </form>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleProfileModalToggle} color="secondary">
+              Cancel
+            </Button>
+            <Button variant="contained" color="primary">
               Save
-            </button>
-          </div>
-        </form>
-      </Modal>
+            </Button>
+          </DialogActions>
+        </Dialog>
+      )}
     </div>
   );
+};
+
+const getActiveMenuColor = (activeSubMenu) => {
+  const menuColors = {
+    Dashboard: "text-indigo-500",
+    "Tutor Training": "text-purple-500",
+    Ebooks: "text-orange-500",
+    Affiliates: "text-yellow-500",
+    Support: "text-red-500",
+    Settings: "text-gray-500",
+    "BootCamp Team Training": "text-indigo-500",
+    "Tutor Booking": "text-green-500",
+    Enrollments: "text-yellow-500",
+  };
+  return menuColors[activeSubMenu] || "text-gray-500";
+};
+
+const Greeting = () => {
+  const currentHour = new Date().getHours();
+  let greeting = "Good morning";
+  if (currentHour >= 12 && currentHour < 17) greeting = "Good afternoon";
+  else if (currentHour >= 17) greeting = "Good evening";
+
+  return <p>{greeting}, Daniel!</p>;
 };
 
 export default Header;
